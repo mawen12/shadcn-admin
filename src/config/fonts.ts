@@ -16,4 +16,5 @@
  *      --font-roboto: 'Roboto', var(--font-sans);
  *   }
  */
+// 支持的字体
 export const fonts = ['inter', 'manrope', 'system'] as const

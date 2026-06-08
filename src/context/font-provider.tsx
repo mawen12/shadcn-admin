@@ -15,25 +15,33 @@ type FontContextType = {
 
 const FontContext = createContext<FontContextType | null>(null)
 
+// 支持读取字体、切换字体
 export function FontProvider({ children }: { children: React.ReactNode }) {
   const [font, _setFont] = useState<Font>(() => {
+    // 尝试从 cookie 中读取
     const savedFont = getCookie(FONT_COOKIE_NAME)
+    // 校验值，否则取首个
     return fonts.includes(savedFont as Font) ? (savedFont as Font) : fonts[0]
   })
 
   useEffect(() => {
     const applyFont = (font: string) => {
       const root = document.documentElement
+      // 移除所有 font-*
       root.classList.forEach((cls) => {
         if (cls.startsWith('font-')) root.classList.remove(cls)
       })
+      // 应用 font
       root.classList.add(`font-${font}`)
     }
 
+    // 在字体变更时同步更新
     applyFont(font)
+    // 字体变更时触发  
   }, [font])
 
   const setFont = (font: Font) => {
+    // 写入 cookie，有效期 1 年
     setCookie(FONT_COOKIE_NAME, font, FONT_COOKIE_MAX_AGE)
     _setFont(font)
   }
