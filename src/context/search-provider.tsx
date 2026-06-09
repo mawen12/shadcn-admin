@@ -13,8 +13,10 @@ type SearchProviderProps = {
 }
 
 export function SearchProvider({ children }: SearchProviderProps) {
+  // 搜索是否打开的状态
   const [open, setOpen] = useState(false)
 
+  // 组件渲染时注册事件
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -22,6 +24,7 @@ export function SearchProvider({ children }: SearchProviderProps) {
         setOpen((open) => !open)
       }
     }
+    // 按下 keydown + meta/ctrl 键，更新状态
     document.addEventListener('keydown', down)
     return () => document.removeEventListener('keydown', down)
   }, [])

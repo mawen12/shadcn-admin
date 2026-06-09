@@ -32,16 +32,20 @@ type LayoutProviderProps = {
 }
 
 export function LayoutProvider({ children }: LayoutProviderProps) {
+  // 
   const [collapsible, _setCollapsible] = useState<Collapsible>(() => {
+    // 从 cookie 读取配置项，否则使用默认
     const saved = getCookie(LAYOUT_COLLAPSIBLE_COOKIE_NAME)
     return (saved as Collapsible) || DEFAULT_COLLAPSIBLE
   })
 
   const [variant, _setVariant] = useState<Variant>(() => {
+    // 从 cookie 中读取配置项，否则使用默认
     const saved = getCookie(LAYOUT_VARIANT_COOKIE_NAME)
     return (saved as Variant) || DEFAULT_VARIANT
   })
 
+  // 更新时，同时写入变量和 cookie
   const setCollapsible = (newCollapsible: Collapsible) => {
     _setCollapsible(newCollapsible)
     setCookie(
@@ -51,6 +55,7 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
     )
   }
 
+  // 更新时，同时写入变量和 cookie
   const setVariant = (newVariant: Variant) => {
     _setVariant(newVariant)
     setCookie(LAYOUT_VARIANT_COOKIE_NAME, newVariant, LAYOUT_COOKIE_MAX_AGE)

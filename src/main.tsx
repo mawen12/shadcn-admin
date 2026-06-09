@@ -119,7 +119,7 @@ if (!rootElement.innerHTML) {
           <FontProvider>
             {/* RTL */}
             <DirectionProvider>
-              {/* 路由 */}
+              {/* 将路由挂载到根节点 */}
               <RouterProvider router={router} />
             </DirectionProvider>
           </FontProvider>

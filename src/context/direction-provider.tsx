@@ -17,14 +17,18 @@ type DirectionContextType = {
 
 const DirectionContext = createContext<DirectionContextType | null>(null)
 
+// 提供设置布局、重置布局、当前布局
 export function DirectionProvider({ children }: { children: React.ReactNode }) {
   const [dir, _setDir] = useState<Direction>(
+    // 从 cookie 中读取，否则使用默认布局
     () => (getCookie(DIRECTION_COOKIE_NAME) as Direction) || DEFAULT_DIRECTION
   )
 
   useEffect(() => {
     const htmlElement = document.documentElement
+    // 当 dir 变化时，同步更新
     htmlElement.setAttribute('dir', dir)
+    // 监听 dir
   }, [dir])
 
   const setDir = (dir: Direction) => {

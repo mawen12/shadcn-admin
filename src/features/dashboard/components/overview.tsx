@@ -53,8 +53,10 @@ const data = [
 
 export function Overview() {
   return (
+    // 全宽，高度 350px
     <ResponsiveContainer width='100%' height={350}>
       <BarChart data={data}>
+        {/* X轴展示名称 */}
         <XAxis
           dataKey='name'
           stroke='#888888'
@@ -62,6 +64,7 @@ export function Overview() {
           tickLine={false}
           axisLine={false}
         />
+        {/* Y轴 */}
         <YAxis
           direction='ltr'
           stroke='#888888'
@@ -70,6 +73,7 @@ export function Overview() {
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
         />
+        {/* 圆柱：取 total 值 */}
         <Bar
           dataKey='total'
           fill='currentColor'

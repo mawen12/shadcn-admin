@@ -3,13 +3,18 @@ import { useAuthStore } from '@/stores/auth-store'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 
 interface SignOutDialogProps {
+  // 是否打开
   open: boolean
+  // 关闭操作
   onOpenChange: (open: boolean) => void
 }
 
 export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
+  // 导航到指定路径
   const navigate = useNavigate()
+  // 当前路由位置
   const location = useLocation()
+  // 授权
   const { auth } = useAuthStore()
 
   const handleSignOut = () => {

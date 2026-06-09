@@ -12,12 +12,18 @@ type AuthenticatedLayoutProps = {
 }
 
 export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
+  // 从 cookie 中读取先前的状态
   const defaultOpen = getCookie('sidebar_state') !== 'false'
   return (
+    // 搜索支持
     <SearchProvider>
+      {/* 布局支持 */}
       <LayoutProvider>
+        {/* Sidebar */}
         <SidebarProvider defaultOpen={defaultOpen}>
+          {/* 无障碍访问组件 */}
           <SkipToMain />
+          {/*  */}
           <AppSidebar />
           <SidebarInset
             className={cn(
