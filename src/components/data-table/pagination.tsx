@@ -20,6 +20,9 @@ type DataTablePaginationProps<TData> = {
   className?: string
 }
 
+/**
+ * 
+ */
 export function DataTablePagination<TData>({
   table,
   className,
@@ -28,22 +31,34 @@ export function DataTablePagination<TData>({
   const currentPage = table.getState().pagination.pageIndex + 1
   // 总页数
   const totalPages = table.getPageCount()
-  // 
+  // 带有省略号的智能页码范围算法
   const pageNumbers = getPageNumbers(currentPage, totalPages)
 
   return (
     <div
       className={cn(
+        // flex items-center justify-between: 弹性布局，垂直居中，首尾元素贴边，中间留空
+        // overflow-clip: 超出容器内容被裁剪，且不允许程序滚动
+        // px-2: 左右内边距 8px
         'flex items-center justify-between overflow-clip px-2',
+        // @max-2xl/content:flex-col-reverse @max-2xl/content:gap-4: 容器查询响应式，但容器宽度 <= 2xl 时生效，作用域为 content 命名空间，此时垂直反向排列，子元素顺序颠倒，子元素之间间距为 16px
         '@max-2xl/content:flex-col-reverse @max-2xl/content:gap-4',
         className
       )}
+      // 定义裁剪边距为 1px
       style={{ overflowClipMargin: 1 }}
     >
+      {/* 第一部分：展示当前所在页，以及可选择的每页数量 */}
       <div className='flex w-full items-center justify-between'>
+        {/* 每页记录数量 */}
+        {/* flex items-center justify-center: 弹性布局，垂直居中，水平居中 */}
+        {/* w-25: 宽度 100px */}
+        {/* @2xl/content:hidden: 容器宽度 >= 2xl 时隐藏 */}
         <div className='flex w-25 items-center justify-center text-sm font-medium @2xl/content:hidden'>
           Page {currentPage} of {totalPages}
         </div>
+        {/* flex items-center gap-2: 弹性布局，垂直居中，子项间隔 8px */}
+        {/* @max-2xl/content:flex-row-reverse: 容器宽度 <= 2xl 时生效，水平方向颠倒 */}
         <div className='flex items-center gap-2 @max-2xl/content:flex-row-reverse'>
           <Select
             value={`${table.getState().pagination.pageSize}`}
@@ -62,10 +77,12 @@ export function DataTablePagination<TData>({
               ))}
             </SelectContent>
           </Select>
+          {/*  */}
           <p className='hidden text-sm font-medium sm:block'>Rows per page</p>
         </div>
       </div>
 
+      {/*  */}
       <div className='flex items-center sm:space-x-6 lg:space-x-8'>
         <div className='flex w-25 items-center justify-center text-sm font-medium @max-3xl/content:hidden'>
           Page {currentPage} of {totalPages}
