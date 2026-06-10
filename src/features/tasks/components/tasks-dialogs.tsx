@@ -5,23 +5,28 @@ import { TasksMutateDrawer } from './tasks-mutate-drawer'
 import { useTasks } from './tasks-provider'
 
 export function TasksDialogs() {
+  // 从 task context 读取 
   const { open, setOpen, currentRow, setCurrentRow } = useTasks()
   return (
     <>
+      {/* Create */}
       <TasksMutateDrawer
         key='task-create'
         open={open === 'create'}
         onOpenChange={() => setOpen('create')}
       />
 
+      {/* Import */}
       <TasksImportDialog
         key='tasks-import'
         open={open === 'import'}
         onOpenChange={() => setOpen('import')}
       />
 
+      {/* 仅选中了记录才能触发 */}
       {currentRow && (
         <>
+          {/* Update */}
           <TasksMutateDrawer
             key={`task-update-${currentRow.id}`}
             open={open === 'update'}
@@ -34,6 +39,7 @@ export function TasksDialogs() {
             currentRow={currentRow}
           />
 
+          {/* Delete */}
           <ConfirmDialog
             key='task-delete'
             destructive

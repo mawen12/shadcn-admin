@@ -36,6 +36,9 @@ type ConfirmDialogProps = {
     | { form?: undefined; handleConfirm: () => void }
   )
 
+/**
+ * 通用的确认 Dialog
+ */
 export function ConfirmDialog(props: ConfirmDialogProps) {
   const {
     title,

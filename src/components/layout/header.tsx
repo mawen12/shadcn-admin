@@ -8,6 +8,9 @@ type HeaderProps = React.HTMLAttributes<HTMLElement> & {
   ref?: React.Ref<HTMLElement>
 }
 
+/**
+ * 提供通用的 Header
+ */
 export function Header({ className, fixed, children, ...props }: HeaderProps) {
   // 保存页面垂直滚动值（顶部偏移）
   const [offset, setOffset] = useState(0)

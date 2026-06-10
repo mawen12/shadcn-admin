@@ -38,10 +38,15 @@ const data = [
   },
 ]
 
+/**
+ * 用于展示用户点击、访问数的图标
+ */
 export function AnalyticsChart() {
   return (
+    // 全宽，高度 300px
     <ResponsiveContainer width='100%' height={300}>
       <AreaChart data={data}>
+        {/* X轴，取 name */}
         <XAxis
           dataKey='name'
           stroke='#888888'
@@ -49,12 +54,14 @@ export function AnalyticsChart() {
           tickLine={false}
           axisLine={false}
         />
+        {/* Y轴 */}
         <YAxis
           stroke='#888888'
           fontSize={12}
           tickLine={false}
           axisLine={false}
         />
+        {/* 数据线条1，取 clicks */}
         <Area
           type='monotone'
           dataKey='clicks'
@@ -63,6 +70,7 @@ export function AnalyticsChart() {
           fill='currentColor'
           fillOpacity={0.15}
         />
+        {/* 数据线条2，取 uniques */}
         <Area
           type='monotone'
           dataKey='uniques'

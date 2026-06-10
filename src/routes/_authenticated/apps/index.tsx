@@ -11,6 +11,9 @@ const appsSearchSchema = z.object({
   sort: z.enum(['asc', 'desc']).optional().catch(undefined),
 })
 
+/**
+ * 路由为：/apps
+ */
 export const Route = createFileRoute('/_authenticated/apps/')({
   validateSearch: appsSearchSchema,
   component: Apps,

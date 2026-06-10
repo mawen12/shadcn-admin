@@ -9,9 +9,9 @@ type SearchRecord = Record<string, unknown>
 
 export type NavigateFn = (opts: {
   search:
-    | true
-    | SearchRecord
-    | ((prev: SearchRecord) => Partial<SearchRecord> | SearchRecord)
+  | true
+  | SearchRecord
+  | ((prev: SearchRecord) => Partial<SearchRecord> | SearchRecord)
   replace?: boolean
 }) => void
 
@@ -31,20 +31,20 @@ type UseTableUrlStateParams = {
   }
   columnFilters?: Array<
     | {
-        columnId: string
-        searchKey: string
-        type?: 'string'
-        // Optional transformers for custom types
-        serialize?: (value: unknown) => unknown
-        deserialize?: (value: unknown) => unknown
-      }
+      columnId: string
+      searchKey: string
+      type?: 'string'
+      // Optional transformers for custom types
+      serialize?: (value: unknown) => unknown
+      deserialize?: (value: unknown) => unknown
+    }
     | {
-        columnId: string
-        searchKey: string
-        type: 'array'
-        serialize?: (value: unknown) => unknown
-        deserialize?: (value: unknown) => unknown
-      }
+      columnId: string
+      searchKey: string
+      type: 'array'
+      serialize?: (value: unknown) => unknown
+      deserialize?: (value: unknown) => unknown
+    }
   >
 }
 
@@ -65,6 +65,10 @@ type UseTableUrlStateReturn = {
   ) => void
 }
 
+/**
+ * 基于 URL 同步表格状态的 hook
+ * 支持查询条件、分页、导航、全局过滤、列过滤
+ */
 export function useTableUrlState(
   params: UseTableUrlStateParams
 ): UseTableUrlStateReturn {
@@ -76,11 +80,13 @@ export function useTableUrlState(
     columnFilters: columnFiltersCfg = [],
   } = params
 
+  // 读取分页信息
   const pageKey = paginationCfg?.pageKey ?? ('page' as string)
   const pageSizeKey = paginationCfg?.pageSizeKey ?? ('pageSize' as string)
   const defaultPage = paginationCfg?.defaultPage ?? 1
   const defaultPageSize = paginationCfg?.defaultPageSize ?? 10
 
+  // 读取过滤信息
   const globalFilterKey = globalFilterCfg?.key ?? ('filter' as string)
   const globalFilterEnabled = globalFilterCfg?.enabled ?? true
   const trimGlobal = globalFilterCfg?.trim ?? true
@@ -107,9 +113,11 @@ export function useTableUrlState(
     return collected
   }, [columnFiltersCfg, search])
 
+  // 管理列过滤
   const [columnFilters, setColumnFilters] =
     useState<ColumnFiltersState>(initialColumnFilters)
 
+  // 管理分页
   const pagination: PaginationState = useMemo(() => {
     const rawPage = (search as SearchRecord)[pageKey]
     const rawPageSize = (search as SearchRecord)[pageSizeKey]
@@ -119,10 +127,14 @@ export function useTableUrlState(
     return { pageIndex: Math.max(0, pageNum - 1), pageSize: pageSizeNum }
   }, [search, pageKey, pageSizeKey, defaultPage, defaultPageSize])
 
+  // 分页变化的回调
   const onPaginationChange: OnChangeFn<PaginationState> = (updater) => {
     const next = typeof updater === 'function' ? updater(pagination) : updater
+    // 新的页数
     const nextPage = next.pageIndex + 1
+    // 新的每页数量
     const nextPageSize = next.pageSize
+    // 触发导航刷新，本质上是写入URL
     navigate({
       search: (prev) => ({
         ...(prev as SearchRecord),
@@ -139,25 +151,31 @@ export function useTableUrlState(
     return typeof raw === 'string' ? raw : ''
   })
 
+  // 过滤条件发生变化的回调
   const onGlobalFilterChange: OnChangeFn<string> | undefined =
     globalFilterEnabled
       ? (updater) => {
-          const next =
-            typeof updater === 'function'
-              ? updater(globalFilter ?? '')
-              : updater
-          const value = trimGlobal ? next.trim() : next
-          setGlobalFilter(value)
-          navigate({
-            search: (prev) => ({
-              ...(prev as SearchRecord),
-              [pageKey]: undefined,
-              [globalFilterKey]: value ? value : undefined,
-            }),
-          })
-        }
+        // 新的过滤条件
+        const next =
+          typeof updater === 'function'
+            ? updater(globalFilter ?? '')
+            : updater
+        // 如果开启了 trim，则去除首尾空格
+        const value = trimGlobal ? next.trim() : next
+        // 回写
+        setGlobalFilter(value)
+        // 触发导航刷新，本质上是写入写入URL
+        navigate({
+          search: (prev) => ({
+            ...(prev as SearchRecord),
+            [pageKey]: undefined,
+            [globalFilterKey]: value ? value : undefined,
+          }),
+        })
+      }
       : undefined
 
+  // 列过滤回调
   const onColumnFiltersChange: OnChangeFn<ColumnFiltersState> = (updater) => {
     const next =
       typeof updater === 'function' ? updater(columnFilters) : updater
@@ -190,6 +208,7 @@ export function useTableUrlState(
     })
   }
 
+  // 确保页数在合法数值范围内
   const ensurePageInRange = (
     pageCount: number,
     opts: { resetTo?: 'first' | 'last' } = { resetTo: 'first' }

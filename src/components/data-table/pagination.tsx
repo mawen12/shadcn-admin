@@ -24,8 +24,11 @@ export function DataTablePagination<TData>({
   table,
   className,
 }: DataTablePaginationProps<TData>) {
+  // 当前第几页
   const currentPage = table.getState().pagination.pageIndex + 1
+  // 总页数
   const totalPages = table.getPageCount()
+  // 
   const pageNumbers = getPageNumbers(currentPage, totalPages)
 
   return (

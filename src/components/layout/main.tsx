@@ -28,6 +28,7 @@ export function Main({ fixed, className, fluid, ...props }: MainProps) {
         // If layout is not fluid, set the max-width
         // 仅在非 fluid 时生效，非流式布局时，内容不要无限拉宽，保持阅读宽度
         !fluid &&
+        // 此处时配合 AuthenticatedLayout 中的 @container/content 配置
         // @7xl/content:mx-auto: 在这个容器查询条件下居中 
         // @7xl/content:w-full: 宽度拉满 
         // @7xl/content:max-w-7xl: 最大宽度限制为 max-w-7xl

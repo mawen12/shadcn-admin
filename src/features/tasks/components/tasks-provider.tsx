@@ -5,8 +5,10 @@ import { type Task } from '../data/schema'
 type TasksDialogType = 'create' | 'update' | 'delete' | 'import'
 
 type TasksContextType = {
+  // 打开的 Dialog 类型，支持 create/update/delete/import 四种类型
   open: TasksDialogType | null
   setOpen: (str: TasksDialogType | null) => void
+  // 当前行
   currentRow: Task | null
   setCurrentRow: React.Dispatch<React.SetStateAction<Task | null>>
 }
@@ -14,7 +16,9 @@ type TasksContextType = {
 const TasksContext = React.createContext<TasksContextType | null>(null)
 
 export function TasksProvider({ children }: { children: React.ReactNode }) {
+  // 是否打开的状态
   const [open, setOpen] = useDialogState<TasksDialogType>(null)
+  // 跟踪当前行
   const [currentRow, setCurrentRow] = useState<Task | null>(null)
 
   return (

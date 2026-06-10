@@ -1,9 +1,11 @@
 import { faker } from '@faker-js/faker'
 
 // Set a fixed seed for consistent data generation
+// 数据模拟生成器
 faker.seed(12345)
 
 export const tasks = Array.from({ length: 100 }, () => {
+  // status 枚举值
   const statuses = [
     'todo',
     'in progress',
@@ -11,7 +13,9 @@ export const tasks = Array.from({ length: 100 }, () => {
     'canceled',
     'backlog',
   ] as const
+  // label 枚举
   const labels = ['bug', 'feature', 'documentation'] as const
+  // priority 枚举
   const priorities = ['low', 'medium', 'high'] as const
 
   return {

@@ -11,6 +11,7 @@ import { sidebarData } from './data/sidebar-data'
 import { NavGroup } from './nav-group'
 import { NavUser } from './nav-user'
 import { TeamSwitcher } from './team-switcher'
+import { AppTitle } from './app-title';
 
 export function AppSidebar() {
   // 读取 layout
@@ -19,19 +20,25 @@ export function AppSidebar() {
     <Sidebar collapsible={collapsible} variant={variant}>
       {/* Header */}
       <SidebarHeader>
+        {/* 团队切换器 */}
         <TeamSwitcher teams={sidebarData.teams} />
 
         {/* Replace <TeamSwitch /> with the following <AppTitle />
          /* if you want to use the normal app title instead of TeamSwitch dropdown */}
         {/* <AppTitle /> */}
       </SidebarHeader>
+
       {/* Content */}
       <SidebarContent>
+        {/* 菜单区 */}
         {sidebarData.navGroups.map((props) => (
           <NavGroup key={props.title} {...props} />
         ))}
       </SidebarContent>
+
+      {/* Footer */}
       <SidebarFooter>
+        {/* 用户信息区 */}
         <NavUser user={sidebarData.user} />
       </SidebarFooter>
       <SidebarRail />

@@ -70,6 +70,7 @@ export function Dashboard() {
               <TabsTrigger value='notifications' disabled>Notifications</TabsTrigger>
             </TabsList>
           </div>
+          {/* overview tab */}
           {/* space-y-4: 竖向子元素间隔 4px */}
           <TabsContent value='overview' className='space-y-4'>
             {/* grid: 网格布局 */}
@@ -257,6 +258,7 @@ export function Dashboard() {
               </Card>
             </div>
           </TabsContent>
+          {/* analytics tab */}
           <TabsContent value='analytics' className='space-y-4'>
             <Analytics />
           </TabsContent>
