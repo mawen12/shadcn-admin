@@ -20,6 +20,7 @@ export function ThemeSwitch() {
   /* Update theme-color meta tag
    * when theme is updated */
   // 在主题变化时，同步更新页面的 <meta name="theme-color">
+  // TODO by mawen 此处应该更换为 resolvedTheme，因为如果是 system 的话， 
   useEffect(() => {
     // 将主题映射到对应颜色
     const themeColor = theme === 'dark' ? '#020817' : '#fff'

@@ -30,9 +30,15 @@ import { type ChatUser, type Convo } from './data/chat-types'
 // Fake Data
 import { conversations } from './data/convo.json'
 
+/**
+ * Chat 页面
+ */
 export function Chats() {
+  // 搜索关键字
   const [search, setSearch] = useState('')
+  // 选择正在聊天的用户
   const [selectedUser, setSelectedUser] = useState<ChatUser | null>(null)
+  // 
   const [mobileSelectedUser, setMobileSelectedUser] = useState<ChatUser | null>(
     null
   )
@@ -40,20 +46,25 @@ export function Chats() {
     useState(false)
 
   // Filtered data based on the search query
+  // 根据查询关键字过滤聊天
   const filteredChatList = conversations.filter(({ fullName }) =>
     fullName.toLowerCase().includes(search.trim().toLowerCase())
   )
 
+  // 将消息按照 d MMM, yyyy 进行分类，即按照天给消息进行分组
   const currentMessage = selectedUser?.messages.reduce(
     (acc: Record<string, Convo[]>, obj) => {
+      // 将时间戳转换为 d MMM, yyyy 格式
       const key = format(obj.timestamp, 'd MMM, yyyy')
 
       // Create an array for the category if it doesn't exist
+      // 如果值不存在，则创建
       if (!acc[key]) {
         acc[key] = []
       }
 
       // Push the current object to the array
+      // 保存到数组中
       acc[key].push(obj)
 
       return acc
@@ -61,29 +72,48 @@ export function Chats() {
     {}
   )
 
+  // 从对话中提取用户
   const users = conversations.map(({ messages, ...user }) => user)
 
   return (
     <>
       {/* ===== Top Heading ===== */}
       <Header>
+        {/* 搜索框 */}
         <Search className='me-auto' />
+        {/* 主题切换 */}
         <ThemeSwitch />
+        {/* Config */}
         <ConfigDrawer />
+        {/* Profile */}
         <ProfileDropdown />
       </Header>
 
       <Main fixed>
+        {/* flex: 弹性盒子布局，没有指定方向时，默认为 flex-row */}
+        {/* h-full: 全高 */}
+        {/* gap-6: 元素间距 24px */}
         <section className='flex h-full gap-6'>
           {/* Left Side */}
+          {/* w-full sm:w-56 lg:w-72 2xl:w-80: 全宽，>= sm 时 224px，>= lg 时 288px，>= 2xl 时 320px */}
+          {/* flex flex-col gap-2: 弹性盒子布局，垂直排列，间距 2px */}
           <div className='flex w-full flex-col gap-2 sm:w-56 lg:w-72 2xl:w-80'>
+            {/* sticky sm:static: 相对于最近的滚动容器的祖先，当 >= sm 时改为固定 */}
+            {/* top-0：固定在顶部 */}
+            {/* z-10 sm:z-auto: 层级更高，当 >= sm 时，改为自动 */}
+            {/* -mx-4 sm:mx-0 px-4 sm:p-0: 抵消父容器的内边距，当 >= sm 时，改为无边距 */}
+            {/* shadow-md sm:shadow-none: 默认隐藏，当 >= sm 时，改为无阴影 */}
             <div className='sticky top-0 z-10 -mx-4 bg-background px-4 pb-3 shadow-md sm:static sm:z-auto sm:mx-0 sm:p-0 sm:shadow-none'>
+              {/* flex items-center justify-between: 弹性盒子布局，垂直居中，两端对齐 */}
+              {/* py-2: 垂直间距 8px */}
               <div className='flex items-center justify-between py-2'>
+                {/* 顶部 title */}
                 <div className='flex gap-2'>
                   <h1 className='text-2xl font-bold'>Inbox</h1>
                   <MessagesSquare size={20} />
                 </div>
 
+                {/* 对话按钮 */}
                 <Button
                   size='icon'
                   variant='ghost'
@@ -94,6 +124,7 @@ export function Chats() {
                 </Button>
               </div>
 
+              {/*  */}
               <label
                 className={cn(
                   'focus-within:ring-1 focus-within:ring-ring focus-within:outline-hidden',
@@ -248,7 +279,7 @@ export function Chats() {
                                   className={cn(
                                     'mt-1 block text-xs font-light text-foreground/75 italic',
                                     msg.sender === 'You' &&
-                                      'text-end text-primary-foreground/85'
+                                    'text-end text-primary-foreground/85'
                                   )}
                                 >
                                   {format(msg.timestamp, 'h:mm a')}

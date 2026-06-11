@@ -27,3 +27,16 @@ tsconfig.json  # TypeScript 顶层配置，应用 app 与 node 两套配置
 tsconfig.node.json # Node 侧 TS 配置，主要用于 Vite 配置文件类型检查
 vite.config.ts  # Vite 配置：集成 React/Tailwind/TanStack Router 插件，并配置 Vite browser 样式
 ```
+
+## src
+
+```markdown
+src
+├── features  页面
+├── components 通用组件
+│   ├── ui  shadcn-ui
+│   ├── data-table 集成了 tanstack-table 的组件
+│   └── layout 布局
+├── routes 基于 tanstack-router 的路由  
+└── styles 样式
+```
