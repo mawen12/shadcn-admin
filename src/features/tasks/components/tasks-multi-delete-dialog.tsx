@@ -18,6 +18,9 @@ type TaskMultiDeleteDialogProps<TData> = {
 
 const CONFIRM_WORD = 'DELETE'
 
+/**
+ * 多个 Task 删除确认 Dialog
+ */
 export function TasksMultiDeleteDialog<TData>({
   open,
   onOpenChange,
@@ -27,22 +30,25 @@ export function TasksMultiDeleteDialog<TData>({
 
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
+  // 处理删除
   const handleDelete = () => {
+    // 需要用户输入 DELETE
     if (value.trim() !== CONFIRM_WORD) {
       toast.error(`Please type "${CONFIRM_WORD}" to confirm.`)
       return
     }
 
+    // 关闭
     onOpenChange(false)
 
+    // toast 弹出结果
     toast.promise(sleep(2000), {
       loading: 'Deleting tasks...',
       success: () => {
         setValue('')
         table.resetRowSelection()
-        return `Deleted ${selectedRows.length} ${
-          selectedRows.length > 1 ? 'tasks' : 'task'
-        }`
+        return `Deleted ${selectedRows.length} ${selectedRows.length > 1 ? 'tasks' : 'task'
+          }`
       },
       error: 'Error',
     })
@@ -53,10 +59,16 @@ export function TasksMultiDeleteDialog<TData>({
       open={open}
       onOpenChange={onOpenChange}
       form='tasks-multi-delete-form'
+      // 仅当输入的内容等于 DELETE 时，才会展示删除按钮
       disabled={value.trim() !== CONFIRM_WORD}
+      // 标题
       title={
+        // 文本红色
         <span className='text-destructive'>
           <AlertTriangle
+            // me-1: 右侧外边距 4px
+            // inline-block: 行内块级，确保 margin 生效
+            // stroke-destructive: 描边颜色使用主题的 dagner 色
             className='me-1 inline-block stroke-destructive'
             size={18}
           />{' '}
@@ -65,6 +77,7 @@ export function TasksMultiDeleteDialog<TData>({
         </span>
       }
       desc={
+        // 描述内容
         <form
           id='tasks-multi-delete-form'
           onSubmit={(e) => {
@@ -80,6 +93,7 @@ export function TasksMultiDeleteDialog<TData>({
 
           <Label className='my-4 flex flex-col items-start gap-1.5'>
             <span className=''>Confirm by typing "{CONFIRM_WORD}":</span>
+            {/* 要输入的内容 */}
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
@@ -88,6 +102,7 @@ export function TasksMultiDeleteDialog<TData>({
             />
           </Label>
 
+          {/* 警告区域 */}
           <Alert variant='destructive'>
             <AlertTitle>Warning!</AlertTitle>
             <AlertDescription>

@@ -233,6 +233,7 @@ export function TasksTable({ data }: DataTableProps) {
         </Table>
       </div>
       {/* 分页 */}
+      {/* mt-auto: 在弹性盒子布局中，此属性会将元素推到容器的底部，占据所有可用的上方空间，这是为了确保无论上方的Table内容高度是多少，分页都是被固定推到底部的 */}
       <DataTablePagination table={table} className='mt-auto' />
       {/* 批量操作 */}
       <DataTableBulkActions table={table} />

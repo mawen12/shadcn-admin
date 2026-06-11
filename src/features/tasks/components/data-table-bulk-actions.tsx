@@ -27,10 +27,14 @@ type DataTableBulkActionsProps<TData> = {
 export function DataTableBulkActions<TData>({
   table,
 }: DataTableBulkActionsProps<TData>) {
+  // 是否展示删除确认
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  // 已选择的记录行
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
+  // 批量操作：将选中行的 status 切换为给定的值
   const handleBulkStatusChange = (status: string) => {
+    // 将选择的行转换为 Task[]
     const selectedTasks = selectedRows.map((row) => row.original as Task)
     toast.promise(sleep(2000), {
       loading: 'Updating status...',
@@ -40,9 +44,11 @@ export function DataTableBulkActions<TData>({
       },
       error: 'Error',
     })
+    // 清空选择的行
     table.resetRowSelection()
   }
 
+  // 批量操作：将选中行的 priority 切换为给定的值
   const handleBulkPriorityChange = (priority: string) => {
     const selectedTasks = selectedRows.map((row) => row.original as Task)
     toast.promise(sleep(2000), {
@@ -56,6 +62,7 @@ export function DataTableBulkActions<TData>({
     table.resetRowSelection()
   }
 
+  // 批量导出，将选中行的数据批量导出
   const handleBulkExport = () => {
     const selectedTasks = selectedRows.map((row) => row.original as Task)
     toast.promise(sleep(2000), {
@@ -72,6 +79,7 @@ export function DataTableBulkActions<TData>({
   return (
     <>
       <BulkActionsToolbar table={table} entityName='task'>
+        {/* Status 更新操作 */}
         <DropdownMenu>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -93,6 +101,7 @@ export function DataTableBulkActions<TData>({
             </TooltipContent>
           </Tooltip>
           <DropdownMenuContent sideOffset={14}>
+            {/* 展示 status 选项 */}
             {statuses.map((status) => (
               <DropdownMenuItem
                 key={status.value}
@@ -108,6 +117,7 @@ export function DataTableBulkActions<TData>({
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Priority 更新操作 */}
         <DropdownMenu>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -129,6 +139,7 @@ export function DataTableBulkActions<TData>({
             </TooltipContent>
           </Tooltip>
           <DropdownMenuContent sideOffset={14}>
+            {/* 展示 priority 选项 */}
             {priorities.map((priority) => (
               <DropdownMenuItem
                 key={priority.value}
@@ -144,6 +155,7 @@ export function DataTableBulkActions<TData>({
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* 导出按钮 */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -163,11 +175,13 @@ export function DataTableBulkActions<TData>({
           </TooltipContent>
         </Tooltip>
 
+        {/* 删除按钮 */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant='destructive'
               size='icon'
+              // 点击展示删除确认 Dialog
               onClick={() => setShowDeleteConfirm(true)}
               className='size-8'
               aria-label='Delete selected tasks'
@@ -183,6 +197,7 @@ export function DataTableBulkActions<TData>({
         </Tooltip>
       </BulkActionsToolbar>
 
+      {/* 删除确认 */}
       <TasksMultiDeleteDialog
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
